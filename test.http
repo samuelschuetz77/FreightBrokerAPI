@@ -1,0 +1,30 @@
+### Health check
+GET http://localhost:5025/health
+Accept: application/json
+
+### Get all shippers
+GET http://localhost:5025/shippers
+Accept: application/json
+
+### Create a shipper
+POST http://localhost:5025/shippers
+Content-Type: application/json
+
+{
+  "name": "Acme Farms"
+}
+
+### Get all loads
+GET http://localhost:5025/loads
+Accept: application/json
+
+### Create a load (make sure ShipperId exists!)
+POST http://localhost:5025/loads
+Content-Type: application/json
+
+{
+  "shipperId": 1,
+  "origin": "Iowa",
+  "destination": "Chicago",
+  "shipperRate": 1200
+}
