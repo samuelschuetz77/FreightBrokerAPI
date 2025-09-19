@@ -3,6 +3,18 @@
 This is a practice ASP.NET Core minimal API project that models a **freight brokerage dashboard**.  
 It is inspired by real-world brokerage operations and uses **Entity Framework Core** (EF Core) for data access.
 
+## API Endpoints
+
+The API runs on `http://localhost:5025` and provides the following endpoints:
+
+- `GET /health` - Health check endpoint that returns status "ok"
+- `GET /shippers` - Retrieve all shippers in the system
+- `POST /shippers` - Create a new shipper (requires name in JSON body)
+- `GET /loads` - Retrieve all loads with their associated shipper information
+- `POST /loads` - Create a new load (requires shipperId, origin, destination, and shipperRate)
+
+The API uses Entity Framework Core with SQLite for data storage and implements proper handling of circular references in JSON serialization.
+
 ---
 
 ## What is a Freight Broker?

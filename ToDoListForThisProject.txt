@@ -1,0 +1,103 @@
+FreightBrokerAPI To-Do List (Ch. 3–12 Features)
+
+Expand routing with templates
+
+Add endpoints like GET /loads/{id} and POST /shippers/{shipperId}/loads.
+
+This shows off route parameters, makes the API more REST-like, and helps practice chapter 3’s template patterns.
+
+Return better results
+
+Update endpoints to use Results.NotFound(), Results.BadRequest(), and Results.Created().
+
+Add typed results (Results<Ok<Load>, NotFound>) so contracts are clear and Swagger UI shows multiple response types.
+
+Add validation and filters
+
+For POST /loads, require non-empty Origin/Destination and a valid ShipperId.
+
+Return ValidationProblemDetails if input is bad.
+
+Use .ProducesValidationProblem() so Swagger documents this.
+
+Try an endpoint filter (.AddEndpointFilter()) that checks ShipperId exists before inserting a Load.
+
+Introduce soft deletes via an endpoint
+
+You already modeled Load.IsDeleted with a query filter.
+
+Now add DELETE /loads/{id} that sets IsDeleted = true instead of removing the row.
+
+This practices chapter 12’s query filter mechanics.
+
+Add CRUD endpoints for all entities
+
+GET /shippers, POST /shippers, GET /carriers, POST /carriers, POST /loads/{id}/cover.
+
+Ensures you touch every table and model from your DbContext, practicing EF Core basics.
+
+Seed richer data
+
+Extend DbInitializer with sample Carriers and Coverages.
+
+For example, create a Carrier with MCNumber, then cover a Load with CarrierRate.
+
+This gives GET endpoints something meaningful to show without manual posts.
+
+Use ProblemDetails middleware
+
+Plug in app.UseExceptionHandler() with ProblemDetails responses.
+
+That way if EF Core throws (like a foreign key violation), the client gets a clean 500 response with details.
+
+Add logging middleware
+
+Write a simple app.Use(async (ctx, next) => { ... }); that logs the path and time taken for each request.
+
+Practices chapter 7’s custom middleware and helps debug later.
+
+Organize configuration with Options pattern
+
+Add a BrokerOptions class for settings like default margin percentage or max carriers per load.
+
+Bind it from appsettings.json and inject into endpoints.
+
+Reinforces chapter 8’s configuration/DI pattern.
+
+Clean up JSON output with DTOs
+
+Create LoadDto, ShipperDto, CarrierDto so responses don’t have circular refs or giant nested objects.
+
+Update GET endpoints to project into DTOs.
+
+Swagger then shows clean schemas instead of EF navigation soup.
+
+Enhance Swagger/OpenAPI docs
+
+Add .WithName("CreateLoad"), .WithTags("loads"), .WithSummary() and .WithDescription() consistently.
+
+Install Microsoft.AspNetCore.OpenApi so .WithOpenApi() works and docs are richer.
+
+Makes Swagger UI look professional and teaches chapter 11’s metadata.
+
+Try out NSwag client generation
+
+Create a separate C# console project.
+
+Add <OpenApiReference> pointing to FreightBrokerAPI’s swagger.json.
+
+Use the generated BrokerClient to call /loads.
+
+Practices chapter 11’s client code concepts.
+
+Environment-specific behavior
+
+Only enable Swagger UI in development (if (app.Environment.IsDevelopment()) { ... }).
+
+Keeps production cleaner and aligns with real-world deployment practices.
+
+Stretch goal: dashboard prep
+
+Add an endpoint like GET /loads/active that filters out Delivered/Canceled.
+
+This lays groundwork for a future broker dashboard and practices querying with enums.
